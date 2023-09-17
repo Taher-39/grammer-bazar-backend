@@ -1,6 +1,5 @@
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
-
 dotenv.config();
 
 // mongodb+srv://<username>:<password>@cluster0.cvvga4z.mongodb.net/
