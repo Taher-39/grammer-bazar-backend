@@ -5,16 +5,25 @@ const connectDB = require("./config/connectDB");
 dotenv.config();
 const app = express();
 const productRoute = require("./routes/productRoute");
+const categoryRoute = require("./routes/categoryRoute");
+const brandRoute = require("./routes/brandRoute");
 
 // db connetion
 connectDB();
 
 // midleawre
 app.use(express.json());
-app.use(cors());
+app.use(
+  cors({
+    exposedHeaders: ["X-Total-Count"],
+  })
+);
 
 // routing
-app.use("/api", productRoute);
+app.use("/products", productRoute);
+app.use("/category", categoryRoute);
+app.use("/brand", brandRoute);
+
 app.use("/", (req, res) => {
   res.send("App working ");
 });
