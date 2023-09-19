@@ -2,9 +2,9 @@ const Auth = require("../models/authModel");
 
 const signUp = async (req, res) => {
   try {
-    const { email, password } = req.body;
+    const { name, email, password } = req.body;
 
-    if (!email || !password) {
+    if (!name || !email || !password) {
       return res.status(400).json({ message: "Invalid request" });
     }
 
@@ -13,7 +13,7 @@ const signUp = async (req, res) => {
       return res.status(400).json({ message: "Email already exists" });
     }
 
-    const newUser = new Auth({ email, password });
+    const newUser = new Auth({ name, email, password });
 
     await newUser.save();
 
