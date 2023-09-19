@@ -3,9 +3,10 @@ const Category = require("../models/categoryModel");
 const getCategoryCntlr = async (req, res) => {
   try {
     const categories = await Category.find({}).exec();
-    res.status("200").json(categories);
+    res.status(200).json(categories);
   } catch (error) {
-    res.status("400").json(error);
+    console.error(error);
+    res.status(400).json({ error: error.message });
   }
 };
 
@@ -17,9 +18,7 @@ const postCategoryCntlr = async (req, res) => {
     res.status(201).json(savedBrand);
   } catch (error) {
     console.error(error);
-    res
-      .status(500)
-      .json({ error: "An error occurred while creating the category." });
+    res.status(500).json({ error: error.message });
   }
 };
 

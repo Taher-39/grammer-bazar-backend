@@ -9,9 +9,7 @@ const createProduct = async (req, res) => {
     res.status(201).json(savedProduct);
   } catch (error) {
     console.error(error);
-    res
-      .status(500)
-      .json({ error: "An error occurred while creating the product." });
+    res.status(500).json({ error: error.message });
   }
 };
 
@@ -36,7 +34,7 @@ const fetchAllProducts = async (req, res) => {
     }
 
     // Apply sorting
-    // TODO: how to get sort discounted price not actual price 
+    // TODO: how to get sort discounted price not actual price
     if (req.query._sort && req.query._order) {
       const sortField = req.query._sort;
       const sortOrder = req.query._order === "desc" ? -1 : 1;
@@ -61,9 +59,7 @@ const fetchAllProducts = async (req, res) => {
     res.status(200).json(docs);
   } catch (error) {
     console.error(error);
-    res
-      .status(500)
-      .json({ error: "An error occurred while fetching products." });
+    res.status(500).json({ error: error.message });
   }
 };
 
@@ -71,10 +67,13 @@ const fetchProductById = async (req, res) => {
   try {
     const { id } = req.params;
     const product = await Product.findById(id);
+    if (!product) {
+      return res.status(404).json({ message: "Product not found" });
+    }
     res.status(200).json(product);
   } catch (error) {
     console.error(error);
-    res.status(500).json(error);
+    res.status(500).json(error.message);
   }
 };
 
@@ -88,13 +87,13 @@ const updateProduct = async (req, res) => {
     });
 
     if (!updatedProduct) {
-      throw new Error("Document not found");
+      return res.status(404).json({ message: "Product not found" });
     }
 
     res.status(200).json(updatedProduct);
   } catch (error) {
     console.log(error);
-    res.status(500).json("Something went wrong when update product");
+    res.status(500).json({ error: error.message });
   }
 };
 
