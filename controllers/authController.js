@@ -57,7 +57,51 @@ const signIn = async (req, res) => {
   }
 };
 
+const fetchLoggedInUser = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const user = await Auth.findById(id);
+
+    if (!user) {
+      return res.status(404).json({ message: "No such user found" });
+    }
+
+    return res.status(200).json({
+      id: user.id,
+      addresses: user.address,
+      email: user.email,
+      role: user.role,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: error.message });
+  }
+};
+
+const updateUserAuth = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const updatedAuth = await Auth.findByIdAndUpdate(id, req.body, {
+      runValidators: true,
+      upsert: false,
+      new: true,
+    });
+
+    if (!updatedAuth) {
+      return res.status(404).json({ message: "Auth not found" });
+    }
+
+    res.status(200).json(updatedAuth);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: error.message });
+  }
+};
+
 module.exports = {
   signUp,
   signIn,
+  fetchLoggedInUser,
+  updateUserAuth,
 };
