@@ -27,6 +27,7 @@ app.use("/category", categoryRoute);
 app.use("/brand", brandRoute);
 app.use("/auth", authRoute);
 app.use("/cart", cartRoute);
+app.use("/orders", cartRoute);
 
 app.use("/", (req, res) => {
   res.send("App working ");
