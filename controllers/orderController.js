@@ -5,7 +5,6 @@ const createOrder = async (req, res) => {
   try {
     const newOrder = new Order(req.body);
     const savedOrder = await newOrder.save();
-
     res.status(201).json(savedOrder);
   } catch (error) {
     console.error(error);
@@ -13,9 +12,10 @@ const createOrder = async (req, res) => {
   }
 };
 
-const fetchAllOrders = async (req, res) => {
+const fetchOrdersByUser = async (req, res) => {
   try {
-    const totalOrders = await Order.find({}).exec();             
+    const {user} = req.query;
+    const totalOrders = await Order.find({ user: user });
     res.status(200).json(totalOrders);
   } catch (error) {
     console.error(error);
@@ -27,7 +27,6 @@ const updateOrder = async (req, res) => {
   try {
     const { id } = req.params;
     const updatedOrder = await Order.findByIdAndUpdate(id, req.body, {
-      runValidators: true,
       upsert: false,
       new: true,
     });
@@ -46,5 +45,5 @@ const updateOrder = async (req, res) => {
 module.exports = {
   createOrder,
   updateOrder,
-  fetchAllOrders,
+  fetchOrdersByUser,
 };

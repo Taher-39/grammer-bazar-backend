@@ -15,25 +15,21 @@ const createProduct = async (req, res) => {
 
 const fetchAllProducts = async (req, res) => {
   try {
-    // Create the base query
-    let query = Product.find({});
-    let totalProductQuery = Product.find({});
+    let query = Product.find({ deleted: { $ne: true } });
+    let totalProductQuery = Product.find({ deleted: { $ne: true } });
 
-    // Apply category filter
     if (req.query.category) {
       const category = req.query.category;
       query = query.where("category").equals(category);
       totalProductQuery = totalProductQuery.where("category").equals(category);
     }
 
-    // Apply brand filter
     if (req.query.brand) {
       const brand = req.query.brand;
       query = query.where("brand").equals(brand);
       totalProductQuery = totalProductQuery.where("brand").equals(brand);
     }
 
-    // Apply sorting
     // TODO: how to get sort discounted price not actual price
     if (req.query._sort && req.query._order) {
       const sortField = req.query._sort;
@@ -41,20 +37,16 @@ const fetchAllProducts = async (req, res) => {
       query = query.sort({ [sortField]: sortOrder });
     }
 
-    // Count total documents before pagination
     const totalDocs = await totalProductQuery.countDocuments();
 
-    // Apply pagination
     if (req.query._page && req.query._limit) {
       const pageSize = parseInt(req.query._limit);
       const page = parseInt(req.query._page);
       query = query.skip(pageSize * (page - 1)).limit(pageSize);
     }
 
-    // Execute the query
     const docs = await query.exec();
 
-    // Set response headers
     res.set("X-Total-Count", totalDocs);
     res.status(200).json(docs);
   } catch (error) {

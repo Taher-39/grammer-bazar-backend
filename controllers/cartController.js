@@ -42,7 +42,9 @@ const updateCartItem = async (req, res) => {
       return res.status(404).json({ message: "Cart not found" });
     }
 
-    res.status(200).json(updatedCart);
+    const result = await updatedCart.populate("product");
+
+    res.status(200).json(result);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

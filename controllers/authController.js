@@ -15,9 +15,9 @@ const signUp = async (req, res) => {
 
     const newUser = new Auth({ name, email, password });
 
-    await newUser.save();
+    const doc = await newUser.save();
 
-    res.status(201).json(newUser);
+    res.status(201).json({ id: doc.id, role: doc.role });
   } catch (error) {
     console.error(error);
     res
@@ -44,8 +44,6 @@ const signIn = async (req, res) => {
     }
 
     return res.status(200).json({
-      email,
-      name: user.name,
       role: user.role,
       id: user.id,
     });

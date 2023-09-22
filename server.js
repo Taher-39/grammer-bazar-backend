@@ -9,6 +9,7 @@ const categoryRoute = require("./routes/categoryRoute");
 const brandRoute = require("./routes/brandRoute");
 const authRoute = require("./routes/authRoute");
 const cartRoute = require("./routes/cartRoute");
+const orderRoute = require("./routes/orderRoute");
 
 // db connetion
 connectDB();
@@ -27,7 +28,7 @@ app.use("/category", categoryRoute);
 app.use("/brand", brandRoute);
 app.use("/auth", authRoute);
 app.use("/cart", cartRoute);
-app.use("/orders", cartRoute);
+app.use("/orders", orderRoute);
 
 app.use("/", (req, res) => {
   res.send("App working ");
